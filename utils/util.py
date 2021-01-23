@@ -116,9 +116,10 @@ def draw_bbox(img_path, result, color=(255, 0, 0), thickness=2):
         img_path = cv2.imread(img_path)
         # img_path = cv2.cvtColor(img_path, cv2.COLOR_BGR2RGB)
     img_path = img_path.copy()
-    for point in result:
+    for i,point in enumerate(result):
         point = point.astype(int)
         cv2.polylines(img_path, [point], True, color, thickness)
+        cv2.putText(img_path,f"{i}",tuple(point[0]),cv2.FONT_HERSHEY_SIMPLEX,0.6,(0, 255, 0), 2)
     return img_path
 
 
@@ -173,6 +174,10 @@ def get_datalist(train_data_path):
                         train_data.append((str(img_path), str(label_path)))
     return train_data
 
+def get_datalist_from_jsonfile(train_data_path):
+    with open(train_data_path,'r') as f:
+        data = json.load(f)
+    return data
 
 def parse_config(config: dict) -> dict:
     import anyconfig

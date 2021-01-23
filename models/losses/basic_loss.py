@@ -83,7 +83,7 @@ class DiceLoss(nn.Module):
             gt = gt[:, 0, :, :]
         assert pred.shape == gt.shape
         assert pred.shape == mask.shape
-        if weights is not None:
+        if weights is not None: 
             assert weights.shape == mask.shape
             mask = weights * mask
         intersection = (pred * gt * mask).sum()

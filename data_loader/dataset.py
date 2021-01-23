@@ -9,7 +9,7 @@ import scipy.io as sio
 from tqdm.auto import tqdm
 
 from base import BaseDataSet
-from utils import order_points_clockwise, get_datalist, load,expand_polygon
+from utils import order_points_clockwise, get_datalist, load,expand_polygon,get_datalist_from_jsonfile
 
 
 class ICDAR2015Dataset(BaseDataSet):
@@ -17,7 +17,9 @@ class ICDAR2015Dataset(BaseDataSet):
         super().__init__(data_path, img_mode, pre_processes, filter_keys, ignore_tags, transform)
 
     def load_data(self, data_path: str) -> list:
-        data_list = get_datalist(data_path)
+        # data_list = get_datalist(data_path)
+        print(data_path)
+        data_list = get_datalist_from_jsonfile(data_path[0])
         t_data_list = []
         for img_path, label_path in data_list:
             data = self._get_annotation(label_path)

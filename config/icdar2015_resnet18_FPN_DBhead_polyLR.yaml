@@ -3,7 +3,7 @@ base: ['config/icdar2015.yaml']
 arch:
   type: Model
   backbone:
-    type: resnet18
+    type: MobileNetV3 #resnet18
     pretrained: true
   neck:
     type: FPN
@@ -52,10 +52,10 @@ dataset:
     dataset:
       args:
         data_path:
-          - ./datasets/train.txt
+          - /home/ldl/桌面/论文/文本检测/data/ICDAR2013/train.json
         img_mode: RGB
     loader:
-      batch_size: 1
+      batch_size: 2
       shuffle: true
       pin_memory: true
       num_workers: 6
@@ -64,7 +64,7 @@ dataset:
     dataset:
       args:
         data_path:
-          - ./datasets/test.txt
+          - /home/ldl/桌面/论文/文本检测/data/ICDAR2013/test.json
         pre_processes:
           - type: ResizeShortSize
             args:
