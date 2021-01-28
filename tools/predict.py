@@ -36,21 +36,14 @@ def resize_image(img, short_size):
 
 
 class Pytorch_model:
-    def __init__(self, model_path, post_p_thre=0.7, gpu_id=None):
+    def __init__(self, model_path, post_p_thre=0.7):
         '''
         初始化pytorch模型
         :param model_path: 模型地址(可以是模型的参数或者参数和计算图一起保存的文件)
         :param gpu_id: 在哪一块gpu上运行
         '''
-        self.gpu_id = gpu_id
-
-        if self.gpu_id is not None and isinstance(self.gpu_id, int) and torch.cuda.is_available():
-            self.device = torch.device("cuda:%s" % self.gpu_id)
-        else:
-            self.device = torch.device("cpu")
-        print('device:', self.device)
+        self.device = "cuda:0"
         checkpoint = torch.load(model_path, map_location=self.device)
-
         config = checkpoint['config']
         config['arch']['backbone']['pretrained'] = False
         self.model = build_model(config['arch'])
@@ -66,6 +59,7 @@ class Pytorch_model:
             if t['type'] in ['ToTensor', 'Normalize']:
                 self.transform.append(t)
         self.transform = get_transforms(self.transform)
+
 
     def predict(self, img_path: str, is_output_polygon=False, short_size: int = 640):
         '''
@@ -163,9 +157,8 @@ if __name__ == '__main__':
     #     cv2.imwrite(pred_path, preds * 255)
     #     save_result(output_path.replace('_result.jpg', '.txt'), boxes_list, score_list, args.polygon)
     import cv2
-    model = Pytorch_model(model_path="/home/ldl/下载/model_best.pth",
-        post_p_thre=0.5,
-        gpu_id=0
+    model = Pytorch_model(model_path="/home/ldl/桌面/论文/文本检测/DBNet.pytorch/output/DBNet_MobileNetV3_FPN_DBHead/checkpoint/model_best.pth",
+        post_p_thre=0.5
     )
     imgpath = "/home/ldl/桌面/论文/文本检测/DBNet.pytorch/input/test.jpg"
     _, boxes_list, score_list, t = model.predict(imgpath)
